@@ -75,7 +75,7 @@ const ApplicationForm = () => {
       showToast(res.data.message, 0)
       setapplication(res.data.application)
 
-      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      window.scrollTo({ top: document.body.scrollHeight * 2, behavior: "smooth" });
     } catch (error) {
       console.log(error)
 

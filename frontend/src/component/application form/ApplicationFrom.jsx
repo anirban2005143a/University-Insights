@@ -74,6 +74,8 @@ const ApplicationForm = () => {
       console.log(res)
       showToast(res.data.message, 0)
       setapplication(res.data.application)
+
+      window.scrollTo(0 , window.innerHeight )
     } catch (error) {
       console.log(error)
 
@@ -85,8 +87,6 @@ const ApplicationForm = () => {
       //clear form
       setFormData({ name: "", email: "", program: "", message: "" });
     }
-
-
 
   };
 

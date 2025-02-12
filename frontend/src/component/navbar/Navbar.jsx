@@ -10,7 +10,7 @@ const Navbar = () => {
   return (
     <nav id="navbar" className={` fixed top-0 w-full z-50  py-4 ${window.location.pathname === "/" ? " text-white  " : " text-black "} `}>
       
-      <div className="container w-full mx-auto flex sm:flex-row flex-col justify-between md:items-center px-4">
+      <div className=" w-full mx-auto flex sm:flex-row flex-col justify-between md:items-center px-4">
         <Link to="/" className="text-2xl font-bold text-primary">
           <img src={logoImg} alt="Logo image" className=" w-15 object-cover " />
         </Link>

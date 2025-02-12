@@ -1,6 +1,6 @@
 **University Insights**
 
-A full-stack web application for student interaction, built with Next.js, React, Node.js, Express.js, MongoDB, and Tailwind CSS. The application allows students to register, log in, submit applications, and view their application status.
+A full-stack web application for student interaction, built with  React, Node.js, Express.js, MongoDB, and Tailwind CSS. The application allows students to register, log in, submit applications, and view their application status.
 
  
 GitHub: https://github.com/anirban2005143a/University-Insights

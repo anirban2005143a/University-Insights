@@ -19,7 +19,7 @@ const ApplicationList = (props) => {
                             <p className="text-text "> <strong>Applicant email</strong> : {app.email}</p>
                             <p className="text-text"> <strong>Message</strong>  : {app.message}</p>
                             <p className="text-sm text-text  mt-2">
-                                <span className="font-bold">Date Applied:</span> {app.dateApplied}
+                                <span className="font-bold">Date Applied:</span> {new Date(app.dateApplied).toLocaleString()}
                             </p>
                         </div>
                         <div>

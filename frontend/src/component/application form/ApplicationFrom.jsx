@@ -100,8 +100,6 @@ const ApplicationForm = () => {
   }, [userContext.isLogin])
 
 
-  application && console.log(new Date(application.dateApplied).toLocaleString())
-
   return (
     <>
       <ToastContainer />

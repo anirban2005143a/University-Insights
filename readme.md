@@ -70,10 +70,6 @@ Screenshots
 	Registration Page
  
 	Dashboard
- 
 
-Email: dasanirban268@gmail.com
-GitHub: https://github.com/anirban2005143a/University-Insights
-Live Website - https://university-insights-orpin.vercel.app
 
 

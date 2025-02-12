@@ -10,9 +10,9 @@ const ApplicationList = (props) => {
             {applications.map((app) => (
                 <div
                     key={app.id}
-                    className="application-card bg-[#ffffff] p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+                    className="application-card bg-[#ffffff] md:p-6 p-3 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
                 >
-                    <div className="flex justify-between items-center">
+                    <div className="flex md:flex-row flex-col justify-between items-center">
                         <div>
                             <h3 className="text-xl text-primary underline underline-offset-4"><strong>{app.program}</strong></h3>
                             <p className="text-text "> <strong>Applicant name</strong> : {app.name}</p>
@@ -22,7 +22,7 @@ const ApplicationList = (props) => {
                                 <span className="font-bold">Date Applied:</span> {new Date(app.dateApplied).toLocaleString()}
                             </p>
                         </div>
-                        <div>
+                        <div className=' pt-6 pb-4'>
                             <span
                                 className={`px-4 py-2 rounded-full text-sm font-semibold ${app.status === "Pending"
                                     ? "bg-yellow-100 text-yellow-800"

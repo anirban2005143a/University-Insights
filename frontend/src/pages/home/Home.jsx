@@ -28,7 +28,7 @@ const Home = () => {
         <Navbar />
 
         <div id="homePage" className=" py-[120px] flex  justify-center bg-[#00000094] bg-blend-hard-light min-h-screen bg-cover bg-no-repeat" style={{ backgroundImage: `url(${homeBg})` }}>
-          <div className=" flex flex-col my-auto items-center backdrop-blur-sm md:w-7/12 sm:w-9/12 w-11/12 text-white py-10 px-8 rounded-2xl bg-[#00000046]">
+          <div className=" flex flex-col my-auto items-center backdrop-blur-sm md:w-7/12 sm:w-9/12 w-11/12 text-white py-10 md:px-8 px-4 rounded-2xl bg-[#00000046]">
             <h1
               className="hero-title md:text-6xl text-4xl py-5 font-semibold text-primary text-center 
                       bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">

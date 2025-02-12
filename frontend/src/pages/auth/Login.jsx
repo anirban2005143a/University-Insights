@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios"
 import { ToastContainer, toast } from "react-toastify"
@@ -7,10 +7,12 @@ import { FaSpinner } from "react-icons/fa6";
 
 import Navbar from '../../component/navbar/Navbar'
 import Footer from '../../component/Footer/Footer'
+import UserContext from '../../context API/userContext';
 
 const Login = () => {
 
-  const navigate = useNavigate()
+  const navigate = useNavigate()// navigate componets
+  const userContext = useContext(UserContext) // context api
 
   const [email, setemail] = useState("")
   const [password, setpassword] = useState("")
@@ -52,11 +54,24 @@ const Login = () => {
       })
       console.log(res)
       res.data.message && showToast(res.data.message, 0)
+
+      //set islogin true
+      userContext.setisLogin(1)
+
+      //store data in local storage
       window.localStorage.setItem("token", res.data.jwtToken)
       window.localStorage.setItem("id", res.data.userid)
+
+      //navigate to home page after login
       navigate("/")
-    } catch (error) {
+
+      navigate("/")
+    } catch (error) {// handel errors
       console.log(error)
+
+      //set islogin false
+      userContext.setisLogin(0)
+
       if (error.response && error.response.data) showToast(error.response.data.message, 1)
       else showToast(error.message, 1)
     } finally {
@@ -74,7 +89,7 @@ const Login = () => {
     <div className=' min-h-screen' style={{ backgroundImage: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)" }}>
       <Navbar />
       <ToastContainer />
-      <div id='login' className=' py-[100px]'>
+      <div id='login' className=' py-[120px]'>
         <section >
           <div className="flex flex-col items-center justify-center px-6 mx-auto lg:py-0">
 

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { gsap } from "gsap";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import { ToastContainer, toast } from "react-toastify"
@@ -7,10 +6,12 @@ import { FaSpinner } from "react-icons/fa6";
 
 import Navbar from "../../component/navbar/Navbar";
 import Footer from "../../component/Footer/Footer";
+import UserContext from "../../context API/userContext";
 
 const Register = () => {
 
-  const navigate = useNavigate()
+  const navigate = useNavigate()// navigate componets
+  const userContext = useContext(UserContext) // context api
 
   const [userName, setuserName] = useState("")
   const [email, setemail] = useState("")
@@ -48,7 +49,7 @@ const Register = () => {
   //function to create user
   const createUser = async () => {
     try {
-      setisLoading(true)
+      setisLoading(true)// amke is loader true
       const res = await axios.post(`${import.meta.env.VITE_REACT_BACKEND_URL}/api/auth/create`, {
         userName,
         email,
@@ -57,16 +58,28 @@ const Register = () => {
       })
 
       console.log(res)
-      showToast(res.data.message, 0)
-      //store token and id
+      res.data.message && showToast(res.data.message, 0)
+
+      //set islogin true
+      userContext.setisLogin(1)
+
+      //store data in local storage
       window.localStorage.setItem("token", res.data.jwtToken)
       window.localStorage.setItem("id", res.data.userid)
+
+      //navigate to home page after login
       navigate("/")
-    } catch (error) {
+
+    } catch (error) {// handel errors
       console.log(error)
+
+      //set islogin true
+      userContext.setisLogin(0)
+
       if (error.response && error.response.data) showToast(error.response.data.message, 1)
       else showToast(error.message, 1)
-    }finally{
+    
+    } finally {
       setisLoading(false)
     }
   }
@@ -77,7 +90,7 @@ const Register = () => {
       <Navbar />
       <ToastContainer />
 
-      <div id="signup" className=" py-[100px]" >
+      <div id="signup" className=" py-[120px]" >
         <section className="bg-gray50 ">
           <div className="flex flex-col items-center justify-center px-6 mx-auto  lg:py-0">
 
@@ -91,7 +104,7 @@ const Register = () => {
                   createUser()
                 }} className="space-y-4 md:space-y-6" >
                   <div>
-                    <label htmlFor="fullName" className="block mb-2 text-sm font-medium text-gray-900 ">Your email</label>
+                    <label htmlFor="fullName" className="block mb-2 text-sm font-medium text-gray-900 ">Your Name</label>
                     <input value={userName} onChange={(e) => {
                       setuserName(e.target.value)
                     }} type="text" name="fullName" id="fullName" className="  border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter your name" required />
@@ -103,21 +116,21 @@ const Register = () => {
                     }} type="email" name="email" id="email" className="  border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="name@company.com" required />
                   </div>
                   <div>
-                    <label htmlFor="aboutYourself" className="block mb-2 text-sm font-medium text-gray-900 ">Your email</label>
-                    <textarea value={about} onChange={(e) => {
+                    <label htmlFor="aboutYourself" className="block mb-2 text-sm font-medium text-gray-900 ">About yourself</label>
+                    <textarea minLength={6} value={about} onChange={(e) => {
                       setabout(e.target.value)
                     }} type="text" name="aboutYourself" id="aboutYourself" className=" min-h-[100px] max-h-[200px] border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="About yourslef" required />
                   </div>
                   <div>
                     <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 ">Password</label>
-                    <input value={password} onChange={(e) => {
+                    <input minLength={6} value={password} onChange={(e) => {
                       setpassword(e.target.value)
                     }} type="password" name="password" id="password" placeholder="••••••••" className="  border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " required />
                   </div>
 
                   <button disabled={isLoading} type="submit" className=" flex justify-center cursor-pointer w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600">
-                    {isLoading ? <FaSpinner className=" animate-spin"/> : "Sign Up"}
-                    </button>
+                    {isLoading ? <FaSpinner className=" animate-spin" /> : "Sign Up"}
+                  </button>
                   <p className="text-sm font-light text-gray-500 ">
                     Already have an account ? <Link to="/login" className="font-medium text-primary-600 hover:underline text-blue-500">Sign In</Link>
                   </p>

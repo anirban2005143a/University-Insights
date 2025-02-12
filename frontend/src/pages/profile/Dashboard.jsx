@@ -1,68 +1,114 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import axios from "axios"
+import { FaSpinner } from "react-icons/fa6";
+import { ToastContainer, toast } from "react-toastify"
+
 import ProfileHeader from "./ProfileHeader";
 import ApplicationList from "./ApplicationList";
 import Navbar from "../../component/navbar/Navbar";
 import Footer from "../../component/Footer/Footer";
-// import { gsap } from "gsap";
-// import { useGSAP } from "@gsap/react";
+import UserContext from "../../context API/userContext";
+import PageLoader from "../../component/pageLoader/PageLoader";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  // Mock user data
-  const user = {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    location: "New York, USA",
-    about: "Passionate about technology and innovation.",
-    image: "../../assets/user.jpeg", // Replace with actual user image URL
-  };
 
-  // Mock applications data
-  const applications = [
-    {
-      id: 1,
-      program: "Computer Science",
-      status: "Pending",
-      dateApplied: "2023-10-01",
-      description: "Application for Bachelor's in Computer Science.",
-      message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis esse voluptates doloremque velit molestias voluptate corrupti quae dolor, quidem nisi culpa aperiam incidunt eius ut ab ratione recusandae vitae officia."
-    },
-    {
-      id: 2,
-      program: "Scholarship",
-      status: "Accepted",
-      dateApplied: "2023-09-25",
-      description: "Application for Merit-Based Scholarship.",
-      message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis esse voluptates doloremque velit molestias voluptate corrupti quae dolor, quidem nisi culpa aperiam incidunt eius ut ab ratione recusandae vitae officia."
-    },
-    {
-      id: 3,
-      program: "Business Administration",
-      status: "Rejected",
-      dateApplied: "2023-09-20",
-      description: "Application for Master's in Business Administration.",
-      message: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis esse voluptates doloremque velit molestias voluptate corrupti quae dolor, quidem nisi culpa aperiam incidunt eius ut ab ratione recusandae vitae officia."
-    },
-  ];
+  const userContext = useContext(UserContext) // context api
+  const navigate = useNavigate() // navigate components
 
-  // useGSAP(() => {
-  //   gsap.from(".dashboard-header", { opacity: 0, y: -50, duration: 1, delay: 0.5 });
-  //   gsap.from(".application-card", { opacity: 0, y: 50, duration: 1, stagger: 0.2, delay: 1 });
-  // });
+  const [isLoading, setisLoading] = useState(false)//loading state
+  const [user, setuser] = useState(null)// user details
+  const [applications, setapplications] = useState(null) // all applications
+
+
+  //function to show alert
+  const showToast = (message, err) => {
+    if (err) {
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } else {
+      toast.success(message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  }
+
+  // function to fetch user details
+  const fetchUserDetails = async () => {
+    try {
+      setisLoading(true)
+      const res = await axios.post(`${import.meta.env.VITE_REACT_BACKEND_URL}/api/auth/details`, {
+        userid: localStorage.getItem("id")
+      }, {
+        headers: {
+          "authToken": localStorage.getItem("token")
+        }
+      })
+
+      console.log(res)
+
+      setuser(res.data.user)
+      setapplications(res.data.allApplications)
+
+    } catch (error) {
+      console.log(error)
+
+      if (error.response && error.response.data) showToast(error.response.data.message, 1)
+      else showToast(error.message, 1)
+
+    } finally {
+      setisLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (userContext.isLogin === 0) {
+      navigate("/login")
+    }
+    if (userContext.isLogin === -1) {
+      userContext.checkIsLogin()
+    }
+  }, [userContext.isLogin])
+
+  useEffect(() => {
+    userContext.isLogin === 1 && fetchUserDetails()
+  }, [userContext.isLogin])
+
 
   return (
-    <div style={{ backgroundImage: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)" }}>
+    <>
+      <ToastContainer />
       <Navbar />
+      {(userContext.isLogin !== 1 || isLoading) && <PageLoader />}
 
-      <div className="min-h-screen bg-background p-8 py-[100px]">
-        {/* Dashboard Header */}
-        <ProfileHeader user={user} />
+      {userContext.isLogin === 1 && <div style={{ backgroundImage: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)" }}>
 
-        {/* Applications List */}
-        <ApplicationList applications={applications} />
-      </div>
+        <div className="min-h-screen bg-background md:px-8 sm:px-5 px-3 py-[120px]">
+          {/* Dashboard Header */}
+          {user && <ProfileHeader user={user} />}
 
-      <Footer />
-    </div>
+          {/* Applications List */}
+          {applications && <ApplicationList applications={applications} />}
+        </div>
+
+        <Footer />
+      </div>}
+    </>
   );
 };
 

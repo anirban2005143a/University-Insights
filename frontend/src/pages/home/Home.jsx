@@ -1,40 +1,48 @@
-import React, { useEffect } from "react";
-import { gsap } from "gsap";
-
-import itemBg1 from "../../assets/itemBg1.jpg"
-import itemBg2 from "../../assets/itemBg2.jpg"
-import itemBg3 from "../../assets/itemBg3.jpg"
-import itemBg4 from "../../assets/itemBg4.avif"
-import itemBg5 from "../../assets/itemBg5.avif"
-import itemBg6 from "../../assets/itemBg6.avif"
+import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
+
 import Navbar from "../../component/navbar/Navbar";
+import UserContext from "../../context API/userContext";
+import PageLoader from "../../component/pageLoader/PageLoader";
+import homeBg from "../../assets/homeBg.avif"
 
 const Home = () => {
-  // useEffect(() => {
-  //   gsap.from(".hero-title", { opacity: 0, y: 50, duration: 1, delay: 0.5 });
-  //   gsap.from(".hero-subtitle", { opacity: 0, y: 50, duration: 1, delay: 0.8 });
-  //   gsap.from(".cta-button", { opacity: 0, y: 50, duration: 1, delay: 1.1 });
-  // }, [])
+  const userContext = useContext(UserContext)
 
+  const [isReady, setisReady] = useState(false)
+
+  useEffect(() => {
+    if (userContext.isLogin === -1) userContext.checkIsLogin()
+  }, [userContext.isLogin])
+
+  useEffect(() => {
+    if (userContext.isLogin !== -1) setisReady(true)
+  }, [userContext.isLogin])
+
+  // console.log(isReady)
 
   return (
     <>
-      <Navbar />
+      {!isReady && <PageLoader />}
+      {isReady && <>
+        <Navbar />
 
-      <div id="homePage" className=" py-[100px] flex  justify-center bg-[#00000094] bg-blend-hard-light min-h-screen bg-cover bg-no-repeat" style={{ backgroundImage: `url(${itemBg3})` }}>
-        <div className=" flex flex-col my-auto items-center backdrop-blur-sm md:w-7/12 sm:w-9/12 w-11/12 text-white py-10 px-8 rounded-2xl bg-[#00000046]">
-          <h1 className="hero-title md:text-6xl text-4xl font-bold text-primary mb-4 text-center">
-            Welcome to University Insights
-          </h1>
-          <p className="hero-subtitle text-xl text-text mb-8 py-8 font-light text-center">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae nihil dolor iusto praesentium esse facilis cum quod tempora atque culpa, mollitia, assumenda nesciunt expedita reiciendis excepturi dolorem perspiciatis magni sapiente.
-          </p>
-          <button className=" bg-blue-700 cursor-pointer cta-button bg-primary text-white px-6 py-3 rounded-lg hover:bg-secondary transition duration-300">
-            <Link to="/application">Apply Now</Link>
-          </button>
+        <div id="homePage" className=" py-[120px] flex  justify-center bg-[#00000094] bg-blend-hard-light min-h-screen bg-cover bg-no-repeat" style={{ backgroundImage: `url(${homeBg})` }}>
+          <div className=" flex flex-col my-auto items-center backdrop-blur-sm md:w-7/12 sm:w-9/12 w-11/12 text-white py-10 px-8 rounded-2xl bg-[#00000046]">
+            <h1
+              className="hero-title md:text-6xl text-4xl py-5 font-semibold text-primary text-center 
+                      bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
+              Welcome to University Insights
+            </h1>
+            <p className="hero-subtitle text-xl text-text py-8 font-light text-center">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae nihil dolor iusto praesentium esse facilis cum quod tempora atque culpa, mollitia, assumenda nesciunt expedita reiciendis excepturi dolorem perspiciatis magni sapiente.
+            </p>
+            <button className=" bg-blue-700 hover:shadow-sm hover:shadow-blue-500 cursor-pointer cta-button bg-primary text-white px-6 py-3 rounded-lg transition">
+              <Link to="/application">Apply Now</Link>
+            </button>
+          </div>
         </div>
-      </div>
+      </>}
     </>
 
 

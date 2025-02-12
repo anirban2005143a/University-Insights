@@ -9,9 +9,12 @@ const connectDB = require("./DB/db")
 app.use(cors());
 app.use(express.json());
 
+//import routes
 const Auth = require("./routes/auth")
+const Application = require("./routes/application")
 
 app.use('/api/auth', Auth);
+app.use('/api/application', Application);
 
 
 app.get('/', (req, res) => {
